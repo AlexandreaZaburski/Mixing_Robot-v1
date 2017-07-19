@@ -1,0 +1,14 @@
+//JavaScript
+//Arduino Nano
+
+function MaterialController(July, September) { 
+  July.material = [];
+  July.newMaterial = {
+    name: '',
+    image: '',
+    ingredients: [
+      { name: '', amount: 0 }
+    ]
+  };
+  
+  
