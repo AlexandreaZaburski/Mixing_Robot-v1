@@ -1,0 +1,48 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/libs/bootstrap-css/css/bootstrap.css')
+  link(rel='stylesheet', href='/stylesheets/overrides.css')
+  script(type='text/javascript', src='/socket.io/socket.io.js')
+  script(type='text/javascript', src='/javascripts/controllers/MaterialController.js')
+  script(type='text/javascript', src='/javascripts/robot/FrontEnd.js')
+
+block content
+  div#fullWidth(ng-controller="MaterialController", ng-init="setMaterials( #{JSON.stringify(materials)} ); setPumps( #{JSON.stringify(pumps)} ); writeNumDuplicates()") 
+    div#materialScope.container-fluid
+      div#cover
+        h1.title Mixing_Robot-v1
+        h2.subtitle Automated Material Mixing Robot
+        div#pumps.row
+          div.floatingPumpButtons
+            div#plusMinus
+              div.pumpButton(ng-click="addPump()") +
+              div.pumpButton(ng-click="removePump()") -
+            div#hiddenPumpControls
+              div.pumpButton.singlePump(ng-repeat="pump in pumps.ingredients") {{$index}}
+              div#allPumps.pumpButton.small All
+            div#pumpControlToggle.pumpButton PUMP
+          div.pumpContainer(ng-repeat="pump in pumps.ingredients")
+            select.mixers(ng-change="savePumpValue($index); writeNumDuplicates()", ng-model="pump.ingredient", ng-options="i for i in ingredientsList")
+      div#materials.row
+        h1.section Select a Material
+        div.materialContainer(ng-repeat="material in Materials | orderBy: 'name' | filter: containsIngredients", ng-click="selectMaterial(material)")
+          div.hiddenIngredientFloat(class="hiddenIngredients {{selectedMaterial}}")
+            ul
+              li.ingredientText(ng-repeat="ingredient in material.ingredients")
+                | {{ingredient.name}} 
+          div.materialImage(class="{{selectedMaterial}}", style="opacity: 1.0; background-image: url('/images/materials/{{material.image || \'no_image.jpg\'}}')")
+            div.materialName
+              | {{material.name}}
+          
+
+      div#selectSize 
+        h1.section Select a Size
+        div#sizeSmall.materialSize(ng-click="selectSize('40')") 40ml
+        div#sizeMedium.materialSize(ng-click="selectSize('200')") 200ml
+        div#sizeLarge.materialSize(ng-click="selectSize('400')")  400ml
+
+      div#make(class="{{selectedMaterial.name ? '' : 'noselection'}}")
+        div#makeText.title MAKE
+        div#makeProgress
+block foot
