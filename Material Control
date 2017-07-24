@@ -1,5 +1,5 @@
 //JavaScript
-//Arduino Nano
+//Arduino Nano (Arduino Uno)
 
 function MaterialController($scope, $http) { 
   $scope.materials = [];
